@@ -26,19 +26,25 @@ def main(config):
                 ),
                 duration = 100,
                 delay = 0,
-                origin = animation.Origin(0, 0),
+                origin = animation.Origin(0.5, 0.5),
+                direction = "normal",
+                fill_mode = "forwards",
                 keyframes = [
                     animation.Keyframe(
                         percentage = 0.0,
-                        transforms = [animation.Scale(0, 0)],
-                        curve = "ease_in_out"
+                        transforms = [animation.Scale(0.01, 0.01), animation.Translate(2, 2)],
                     ),
+
+                    animation.Keyframe(
+                        percentage = 0.1,
+                        transforms = [],
+                    ),
+
                     animation.Keyframe(
                         percentage = 1.0,
-                        transforms = [animation.Scale(1, 1)],
-                        curve = "ease_in_out"
-                    )
-                ]
+                        transforms = [],
+                    ),
+                ],
             )
         )
     )
