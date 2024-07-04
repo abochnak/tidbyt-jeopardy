@@ -4,6 +4,7 @@ load("encoding/json.star", "json")
 load("http.star", "http")
 load("cache.star", "cache")
 load("random.star", "random")
+load("schema.star", "schema")
 
 
 def get_question():
@@ -43,7 +44,7 @@ def display_for(duration, child):
         )
     )
 
-def category_section(category):
+def category_section(category, category_duration):
     return render.Box(
         child = animation.Transformation(
             child = render.Box(
@@ -55,7 +56,7 @@ def category_section(category):
                     linespacing = 0
                 )
             ),
-            duration = 20,
+            duration = category_duration,
             delay = 0,
             origin = animation.Origin(0.5, 0.5),
             direction = "normal",
@@ -127,17 +128,17 @@ def main(config):
     data = get_question()
 
     part_one = [
-        category_section(data["category"]),
-        answer_section(data["answer"])
+        category_section(data["category"], int(config.str("category_duration", "20"))),
+        display_for(int(config.str("answer_duration", "100")), answer_section(data["answer"]))
     ]
 
     part_two = [
-        display_for(20, what_is_section()),
-        display_for(20, response_section(data["response"], data["air_date"]))
+        display_for(int(config.str("what_is_delay", "20")), what_is_section()),
+        display_for(int(config.str("response_delay", "100")), response_section(data["response"], data["air_date"]))
     ]
 
     return render.Root(
-        delay = 100,
+        delay = int(config.str("delay", "100")),
         show_full_animation = True,
         child = render.Sequence(
             children = part_one + part_two if config.bool("show_all") else (
@@ -153,12 +154,38 @@ def get_schema():
             schema.Toggle(
                 id = "show_all",
                 name = "Show All",
-                desc = "Show answer and response."
+                desc = "Show answer and response.",
+                icon = "plus"
             ),
             schema.Toggle(
                 id = "show_response",
                 name = "Show Response",
-                desc = "Show response if set, otherwise only show the answer."
+                desc = "Show response if set, otherwise only show the answer.",
+                icon = "plus"
             ),
+            schema.Text(
+                id = "category_duration",
+                name = "Category duration",
+                desc = "Duration to show the category",
+                icon = "plus",
+            ),
+            schema.Text(
+                id = "answer_duration",
+                name = "Answer duration",
+                desc = "Duration to show the answer",
+                icon = "plus",
+            ),
+            schema.Text(
+                id = "what_is_delay",
+                name = "What Is delay",
+                desc = "Duration to show 'what is'",
+                icon = "plus",
+            ),
+            schema.Text(
+                id = "response_delay",
+                name = "Response delay",
+                desc = "Duration to show the response",
+                icon = "plus",
+            )
         ],
     )
