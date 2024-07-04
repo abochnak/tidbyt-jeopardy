@@ -17,7 +17,7 @@ def get_question():
 
     questions = res.json()
     question = questions[random.number(0, len(questions))]
-    cache.set("jeopardy_question", json.encode(question), ttl_seconds=7200)
+    cache.set("jeopardy_question", json.encode(question), ttl_seconds=900)
 
     return question
 
