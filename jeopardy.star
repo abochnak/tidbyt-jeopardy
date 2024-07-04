@@ -126,15 +126,22 @@ def response_section(response, air_date):
 def main(config):
     data = get_question()
 
+    part_one = [
+        category_section(data["category"]),
+        answer_section(data["answer"])
+    ]
+
+    part_two = [
+        display_for(20, what_is_section()),
+        display_for(20, response_section(data["response"], data["air_date"]))
+    ]
+
     return render.Root(
         delay = 100,
         show_full_animation = True,
         child = render.Sequence(
-            children = [
-                category_section(data["category"]),
-                answer_section(data["answer"]),
-                display_for(20, what_is_section()),
-                display_for(20, response_section(data["response"], data["air_date"]))
-            ]
+            children = part_one + part_two if config.bool("show_all") else (
+                part_one if not config.bool("show_response") else part_two
+            )
         )
     )
