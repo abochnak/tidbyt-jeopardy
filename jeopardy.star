@@ -145,3 +145,20 @@ def main(config):
             )
         )
     )
+
+def get_schema():
+    return schema.Schema(
+        version = "1",
+        fields = [
+            schema.Toggle(
+                id = "show_all",
+                name = "Show All",
+                desc = "Show answer and response."
+            ),
+            schema.Toggle(
+                id = "show_response",
+                name = "Show Response",
+                desc = "Show response if set, otherwise only show the answer."
+            ),
+        ],
+    )
